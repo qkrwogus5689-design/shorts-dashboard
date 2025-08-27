@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 
-const API_KEY = "AIzaSyBRuehII9HQjaYi3c92VAldt8V4P8f8Cis"; // 
+// ⛔ 여기에 본인의 API 키 붙여넣기!
+const API_KEY = "AIzaSyBRuehII9HQjaYi3c92VAldt8V4P8f8Cis"; 
+
 const MAX_RESULTS = 10;
-const REGION_CODE = "KR"; // 또는 "US" 등 원하는 국가 코드
+const REGION_CODE = "KR"; // 인기 지역 설정 (KR, US 등)
 
 export default function ShortsDashboard() {
   const [videos, setVideos] = useState([]);
@@ -10,7 +12,8 @@ export default function ShortsDashboard() {
 
   const fetchPopularShorts = async () => {
     setLoading(true);
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&maxResults=${MAX_RESULTS}&regionCode=${REGION_CODE}&videoCategoryId=0&key=${API_KEY}`;
+
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet,statistics&chart=mostPopular&maxResults=${MAX_RESULTS}&regionCode=${REGION_CODE}&key=${API_KEY}`;
 
     try {
       const res = await fetch(url);
@@ -18,14 +21,14 @@ export default function ShortsDashboard() {
 
       if (data.items) {
         const shorts = data.items.filter(
-          (item) => item.statistics.viewCount >= 10000000 && item.snippet.title.length <= 100
+          (item) => item.statistics.viewCount >= 1000000 && item.snippet.title.length <= 100
         );
         setVideos(shorts);
       } else {
         setVideos([]);
       }
     } catch (err) {
-      console.error("API 요청 실패", err);
+      console.error("🔥 API 요청 실패", err);
       setVideos([]);
     } finally {
       setLoading(false);
@@ -39,12 +42,12 @@ export default function ShortsDashboard() {
   return (
     <div style={{ padding: "2rem", maxWidth: "900px", margin: "0 auto" }}>
       <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "1rem" }}>
-        📈 인기 유튜브 쇼츠 (조회수 1천만 이상)
+        📈 인기 유튜브 쇼츠 (조회수 100만 이상)
       </h1>
 
       {loading ? (
-        <p>불러오는 중...</p>
-      ) : (
+        <p>📦 불러오는 중...</p>
+      ) : videos.length > 0 ? (
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", gap: "1rem" }}>
           {videos.map((video) => (
             <div key={video.id} style={{ border: "1px solid #ddd", padding: "1rem", borderRadius: "12px" }}>
@@ -67,6 +70,8 @@ export default function ShortsDashboard() {
             </div>
           ))}
         </div>
+      ) : (
+        <p>😥 조건에 맞는 쇼츠 영상이 없습니다.</p>
       )}
     </div>
   );
