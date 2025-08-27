@@ -1,8 +1,4 @@
 import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 
 export default function ShortsDashboard() {
   const [videoId, setVideoId] = useState("");
@@ -18,35 +14,50 @@ export default function ShortsDashboard() {
   };
 
   return (
-    <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">📊 쇼츠 영상 통계 대시보드</h1>
-      <div className="space-y-2 mb-4">
-        <Label htmlFor="video-id">유튜브 영상 ID 입력</Label>
-        <Input
+    <div style={{ padding: "2rem", maxWidth: "700px", margin: "0 auto" }}>
+      <h1 style={{ fontSize: "24px", fontWeight: "bold", marginBottom: "1rem" }}>
+        📊 쇼츠 영상 통계 대시보드
+      </h1>
+
+      <div style={{ marginBottom: "1.5rem" }}>
+        <label htmlFor="video-id">유튜브 영상 ID 입력</label>
+        <input
           id="video-id"
           placeholder="예: dQw4w9WgXcQ"
           value={videoId}
           onChange={(e) => setVideoId(e.target.value)}
+          style={{ width: "100%", padding: "0.5rem", marginTop: "0.5rem" }}
         />
-        <Button onClick={handleFetch}>영상 불러오기</Button>
+        <button
+          onClick={handleFetch}
+          style={{
+            marginTop: "0.5rem",
+            padding: "0.5rem 1rem",
+            backgroundColor: "#2563eb",
+            color: "#fff",
+            border: "none",
+            borderRadius: "4px",
+          }}
+        >
+          영상 불러오기
+        </button>
       </div>
+
       {results && (
-        <Card>
-          <CardContent className="space-y-4 p-4">
-            <h2 className="text-xl font-semibold">🎬 {results.title}</h2>
-            <p>조회수: {results.views.toLocaleString()}회</p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <Label>원본 영상</Label>
-                <video src={results.original} controls className="w-full rounded-xl" />
-              </div>
-              <div>
-                <Label>편집된 영상</Label>
-                <video src={results.edited} controls className="w-full rounded-xl" />
-              </div>
+        <div style={{ border: "1px solid #ccc", padding: "1rem", borderRadius: "8px" }}>
+          <h2 style={{ fontSize: "20px", fontWeight: "600" }}>🎬 {results.title}</h2>
+          <p>조회수: {results.views.toLocaleString()}회</p>
+          <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap", marginTop: "1rem" }}>
+            <div style={{ flex: "1 1 45%" }}>
+              <p>원본 영상</p>
+              <video src={results.original} controls style={{ width: "100%" }} />
             </div>
-          </CardContent>
-        </Card>
+            <div style={{ flex: "1 1 45%" }}>
+              <p>편집된 영상</p>
+              <video src={results.edited} controls style={{ width: "100%" }} />
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
